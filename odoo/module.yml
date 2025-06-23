@@ -1,0 +1,84 @@
+name: odoo-pfm-modules
+type: odoo
+version: 0.1.0
+description: Custom Odoo modules for Personal Finance Management functionality
+author: Mindbots Inc
+license: Proprietary
+
+dependencies:
+  odoo: "16.0"
+  python: ">=3.10"
+  postgresql: ">=14.0"
+
+modules:
+  - name: pfm_core
+    description: Core PFM functionality and data models
+    depends:
+      - base
+      - account
+      - mail
+  
+  - name: pfm_banking
+    description: Banking integration and transaction management
+    depends:
+      - pfm_core
+      - account_bank_statement_import
+  
+  - name: pfm_reporting
+    description: Financial reporting and analytics
+    depends:
+      - pfm_core
+      - account_reports
+  
+  - name: pfm_ai_integration
+    description: Integration with AI agents
+    depends:
+      - pfm_core
+      - queue_job
+
+capabilities:
+  - account-management: Multi-bank account management
+  - transaction-tracking: Comprehensive transaction tracking
+  - budget-management: Budget creation and monitoring
+  - financial-reporting: Custom financial reports
+  - api-access: REST API for external integrations
+  - workflow-automation: Automated financial workflows
+
+integrations:
+  - name: bank-adapter
+    type: internal
+    description: Sync transactions from bank adapter service
+  
+  - name: ai-agents
+    type: internal
+    description: Integrate AI-powered features
+  
+  - name: document-processing
+    type: internal
+    description: Process financial documents
+
+configuration:
+  environment_variables:
+    - ODOO_DATABASE: Database name
+    - ODOO_DATABASE_HOST: PostgreSQL host
+    - ODOO_DATABASE_PORT: PostgreSQL port
+    - ODOO_DATABASE_USER: Database user
+    - ODOO_DATABASE_PASSWORD: Database password
+    - PFM_API_KEY: API key for external access
+
+deployment:
+  docker: true
+  kubernetes: true
+  resource_requirements:
+    cpu: "2000m"
+    memory: "4Gi"
+
+tags:
+  - odoo
+  - erp
+  - financial-management
+  - accounting
+
+status: development
+created: 2025-06-23
+updated: 2025-06-23

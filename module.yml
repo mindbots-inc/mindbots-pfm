@@ -1,0 +1,68 @@
+name: mindbots-pfm
+type: repository
+version: 0.1.0
+description: Intelligent Personal Finance Management Service - A comprehensive financial management system integrating AI agents, bank adapters, and Odoo ERP
+author: Mindbots Inc
+license: Proprietary
+homepage: https://github.com/mindbots-inc/mindbots-pfm
+
+dependencies:
+  python: ">=3.12"
+  poetry: ">=1.7.0"
+  docker: ">=24.0"
+  docker-compose: ">=2.20"
+
+components:
+  - name: bank-adapter
+    type: service
+    path: services/bank-adapter
+    description: Service for integrating with banks and payment providers
+  
+  - name: api-gateway
+    type: service
+    path: services/api-gateway
+    description: Central API gateway for external access to PFM services
+  
+  - name: transaction-classification
+    type: agent
+    path: agents/transaction-classification
+    description: AI agent for automatic transaction categorization
+  
+  - name: receipt-matching
+    type: agent
+    path: agents/receipt-matching
+    description: AI agent for matching receipts to transactions
+  
+  - name: financial-analysis
+    type: agent
+    path: agents/financial-analysis
+    description: AI agent for generating financial insights and recommendations
+  
+  - name: odoo-modules
+    type: odoo
+    path: odoo
+    description: Custom Odoo modules for PFM functionality
+
+integrations:
+  - service: document-processing-tissue
+    type: internal
+    description: Integration with document processing for receipt OCR
+  
+  - service: memory-cell
+    type: internal
+    description: Integration for persistent financial data storage
+  
+  - service: agent-swarm
+    type: internal
+    description: Integration with agent orchestration framework
+
+tags:
+  - personal-finance
+  - banking
+  - ai-agents
+  - odoo
+  - financial-management
+
+status: development
+created: 2025-06-23
+updated: 2025-06-23
