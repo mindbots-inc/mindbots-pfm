@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     
     # Database settings
     DATABASE_URL: str = Field(
-        default="postgresql+asyncpg://postgres:postgres@localhost:5432/bank_adapter"
+        default="postgresql+asyncpg://postgres:postgres@localhost:5432/pfm"
     )
     
     # Redis settings
