@@ -1,0 +1,78 @@
+name: receipt-matching
+type: agent
+version: 0.1.0
+description: AI agent for matching receipts to transactions using OCR and intelligent matching
+author: Mindbots Inc
+license: Proprietary
+
+dependencies:
+  python: ">=3.12"
+  poetry: ">=1.7.0"
+
+capabilities:
+  - receipt-processing: Process receipts from various sources (email, upload)
+  - ocr-integration: Extract text from receipt images
+  - transaction-matching: Match receipts to bank transactions
+  - fuzzy-matching: Handle variations in merchant names and amounts
+  - multi-format: Support PDF, image, and email formats
+  - confidence-scoring: Provide match confidence levels
+
+agent:
+  framework: LangChain/LangGraph
+  type: matching
+  models:
+    - openai/gpt-4-vision
+    - anthropic/claude-3
+  features:
+    - visual-understanding: Process receipt images directly
+    - text-extraction: Extract structured data from receipts
+    - intelligent-matching: Match despite discrepancies
+    - learning: Improve matching over time
+
+api:
+  type: async
+  interface: Python API
+  methods:
+    - process_receipt: Process a single receipt
+    - match_receipt: Match receipt to transactions
+    - extract_receipt_data: Extract structured data from receipt
+    - get_match_suggestions: Get potential matches
+    - confirm_match: Confirm a receipt-transaction match
+
+integrations:
+  - name: document-processing-tissue
+    type: internal
+    description: Use document processing for OCR
+  
+  - name: bank-adapter
+    type: internal
+    description: Access transactions for matching
+  
+  - name: memory-cell
+    type: internal
+    description: Store matching patterns and history
+
+configuration:
+  environment_variables:
+    - OPENAI_API_KEY: OpenAI API key
+    - ANTHROPIC_API_KEY: Anthropic API key
+    - OCR_SERVICE_URL: OCR service endpoint
+    - MATCHING_THRESHOLD: Minimum confidence for auto-matching
+    - REDIS_URL: Redis for caching
+
+deployment:
+  docker: true
+  kubernetes: true
+  resource_requirements:
+    cpu: "500m"
+    memory: "1Gi"
+
+tags:
+  - ai-agent
+  - receipt-processing
+  - document-matching
+  - ocr
+
+status: development
+created: 2025-06-23
+updated: 2025-06-23

@@ -1,0 +1,84 @@
+name: financial-analysis
+type: agent
+version: 0.1.0
+description: AI agent for generating financial insights, recommendations, and predictive analytics
+author: Mindbots Inc
+license: Proprietary
+
+dependencies:
+  python: ">=3.12"
+  poetry: ">=1.7.0"
+
+capabilities:
+  - spending-analysis: Analyze spending patterns and trends
+  - budget-recommendations: Generate personalized budget suggestions
+  - savings-opportunities: Identify potential savings
+  - cash-flow-prediction: Predict future cash flow
+  - anomaly-detection: Detect unusual financial activity
+  - report-generation: Create comprehensive financial reports
+
+agent:
+  framework: LangChain/LangGraph
+  type: analytical
+  models:
+    - openai/gpt-4
+    - anthropic/claude-3
+  features:
+    - time-series-analysis: Analyze financial trends over time
+    - predictive-modeling: Forecast future financial states
+    - personalization: Tailor insights to user behavior
+    - natural-language: Generate human-readable reports
+
+api:
+  type: async
+  interface: Python API
+  methods:
+    - analyze_spending: Analyze spending patterns
+    - generate_insights: Create financial insights
+    - predict_cash_flow: Forecast cash flow
+    - detect_anomalies: Identify unusual transactions
+    - generate_report: Create financial reports
+    - get_recommendations: Get personalized recommendations
+
+integrations:
+  - name: bank-adapter
+    type: internal
+    description: Access transaction and account data
+  
+  - name: transaction-classification
+    type: internal
+    description: Use categorized transaction data
+  
+  - name: memory-cell
+    type: internal
+    description: Store analysis history and user preferences
+  
+  - name: odoo
+    type: internal
+    description: Integrate with financial reporting
+
+configuration:
+  environment_variables:
+    - OPENAI_API_KEY: OpenAI API key
+    - ANTHROPIC_API_KEY: Anthropic API key
+    - ANALYSIS_MODEL: Default model for analysis
+    - REPORT_FREQUENCY: Default report generation frequency
+    - ANOMALY_THRESHOLD: Threshold for anomaly detection
+    - REDIS_URL: Redis for caching
+
+deployment:
+  docker: true
+  kubernetes: true
+  resource_requirements:
+    cpu: "1000m"
+    memory: "2Gi"
+
+tags:
+  - ai-agent
+  - financial-analysis
+  - predictive-analytics
+  - reporting
+
+status: development
+created: 2025-06-23
+updated: 2025-06-23

@@ -1,0 +1,69 @@
+name: bank-adapter
+type: service
+version: 0.1.0
+description: Bank and payment provider integration service for the Personal Finance Management system
+author: Mindbots Inc
+license: Proprietary
+
+dependencies:
+  python: ">=3.12"
+  poetry: ">=1.7.0"
+
+capabilities:
+  - bank-connection: Connect to various banks and financial institutions
+  - transaction-sync: Synchronize transactions in real-time
+  - balance-monitoring: Monitor account balances
+  - payment-initiation: Initiate payments through connected accounts
+  - multi-provider: Support for multiple banking providers (Plaid, Yodlee, etc.)
+
+api:
+  type: REST
+  framework: FastAPI
+  version: v1
+  endpoints:
+    - /health: Health check endpoint
+    - /connections: Manage bank connections
+    - /accounts: Retrieve account information
+    - /transactions: Sync and retrieve transactions
+    - /balances: Get account balances
+    - /payments: Initiate payments
+
+integrations:
+  - name: plaid
+    type: external
+    description: Integration with Plaid API for US banks
+  
+  - name: yodlee
+    type: external
+    description: Integration with Yodlee for global banks
+  
+  - name: memory-cell
+    type: internal
+    description: Store transaction data in memory cell
+
+configuration:
+  environment_variables:
+    - PLAID_CLIENT_ID: Plaid API client ID
+    - PLAID_SECRET: Plaid API secret
+    - PLAID_ENV: Plaid environment (sandbox/development/production)
+    - YODLEE_CLIENT_ID: Yodlee API client ID
+    - YODLEE_CLIENT_SECRET: Yodlee API secret
+    - DATABASE_URL: PostgreSQL connection string
+    - REDIS_URL: Redis connection for caching
+
+deployment:
+  docker: true
+  kubernetes: true
+  resource_requirements:
+    cpu: "500m"
+    memory: "512Mi"
+
+tags:
+  - banking
+  - integration
+  - financial-data
+  - api
+
+status: development
+created: 2025-06-23
+updated: 2025-06-23

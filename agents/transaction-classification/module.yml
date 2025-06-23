@@ -1,0 +1,79 @@
+name: transaction-classification
+type: agent
+version: 0.1.0
+description: AI agent for automatic transaction categorization using LLMs and machine learning
+author: Mindbots Inc
+license: Proprietary
+
+dependencies:
+  python: ">=3.12"
+  poetry: ">=1.7.0"
+
+capabilities:
+  - transaction-analysis: Analyze transaction descriptions and metadata
+  - category-prediction: Predict transaction categories with high accuracy
+  - merchant-recognition: Identify and normalize merchant names
+  - pattern-learning: Learn from user feedback and corrections
+  - multi-model: Support for multiple LLM providers (OpenAI, Anthropic)
+  - batch-processing: Efficient batch transaction processing
+
+agent:
+  framework: LangChain/LangGraph
+  type: classification
+  models:
+    - openai/gpt-4
+    - anthropic/claude-3
+  features:
+    - zero-shot-classification: Classify without training data
+    - few-shot-learning: Improve with examples
+    - context-awareness: Consider account and user history
+    - confidence-scoring: Provide confidence levels for predictions
+
+api:
+  type: async
+  interface: Python API
+  methods:
+    - classify_transaction: Classify a single transaction
+    - classify_batch: Classify multiple transactions
+    - get_categories: Get available categories
+    - train_from_feedback: Update model with user corrections
+    - get_merchant_info: Get merchant details
+
+integrations:
+  - name: bank-adapter
+    type: internal
+    description: Receive transactions for classification
+  
+  - name: memory-cell
+    type: internal
+    description: Store classification history and patterns
+  
+  - name: odoo
+    type: internal
+    description: Sync categories with accounting system
+
+configuration:
+  environment_variables:
+    - OPENAI_API_KEY: OpenAI API key
+    - ANTHROPIC_API_KEY: Anthropic API key
+    - CLASSIFICATION_MODEL: Default model for classification
+    - CONFIDENCE_THRESHOLD: Minimum confidence for auto-classification
+    - REDIS_URL: Redis for caching
+    - MEMORY_CELL_URL: Memory cell service URL
+
+deployment:
+  docker: true
+  kubernetes: true
+  resource_requirements:
+    cpu: "500m"
+    memory: "1Gi"
+
+tags:
+  - ai-agent
+  - classification
+  - machine-learning
+  - financial-data
+
+status: development
+created: 2025-06-23
+updated: 2025-06-23
