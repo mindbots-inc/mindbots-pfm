@@ -1,0 +1,117 @@
+name: Enforce Branch Flow (Minimal)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: 
+      - main
+      - 'feature/*-epic-*'
+
+jobs:
+  check-branch-flow:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Branch Flow
+      run: |
+        echo "Checking branch flow..."
+        echo "Source Branch: ${{ github.head_ref }}"
+        echo "Target Branch: ${{ github.base_ref }}"
+        
+        source_branch="${{ github.head_ref }}"
+        target_branch="${{ github.base_ref }}"
+        
+        # Define allowed branch flows
+        check_flow() {
+          local source=$1
+          local target=$2
+          
+          # Debug information
+          echo "Evaluating flow: ${source} → ${target}"
+          
+          # Epic branch detection
+          if [[ "$target" =~ ^feature/[0-9]+-epic- ]]; then
+            echo "Target is an epic branch"
+            # Feature branches can merge into epic branches
+            if [[ "$source" =~ ^feature/ ]] && ! [[ "$source" =~ -epic- ]]; then
+              echo "✅ Feature branch can merge into epic branch"
+              return 0
+            fi
+            # Hotfix branches can merge into epic branches
+            if [[ "$source" =~ ^hotfix/ ]]; then
+              echo "✅ Hotfix branch can merge into epic branch"
+              return 0
+            fi
+            # Main branch cannot merge into epic branches
+            if [[ "$source" == "main" ]]; then
+              echo "❌ Main branch cannot merge into epic branch"
+              return 1
+            fi
+          fi
+          
+          # Epic branches can merge into main
+          if [[ "$source" =~ ^feature/[0-9]+-epic- ]] && [[ "$target" == "main" ]]; then
+            echo "✅ Epic branch can merge into main"
+            return 0
+          fi
+          
+          # Feature branches can merge into main
+          if [[ "$source" =~ ^feature/ ]] && [[ "$target" == "main" ]]; then
+            echo "✅ Feature branch can merge into main"
+            return 0
+          fi
+          
+          # Hotfix branches can merge into main
+          if [[ "$source" =~ ^hotfix/ ]] && [[ "$target" == "main" ]]; then
+            echo "✅ Hotfix branch can merge into main"
+            return 0
+          fi
+          
+          # Bugfix branches can merge into main
+          if [[ "$source" =~ ^bugfix/ ]] && [[ "$target" == "main" ]]; then
+            echo "✅ Bugfix branch can merge into main"
+            return 0
+          fi
+          
+          # Chore branches can merge into main
+          if [[ "$source" =~ ^chore/ ]] && [[ "$target" == "main" ]]; then
+            echo "✅ Chore branch can merge into main"
+            return 0
+          fi
+          
+          # Docs branches can merge into main
+          if [[ "$source" =~ ^docs/ ]] && [[ "$target" == "main" ]]; then
+            echo "✅ Docs branch can merge into main"
+            return 0
+          fi
+          
+          # If we get here, the flow is not allowed
+          echo "❌ Branch flow not allowed"
+          return 1
+        }
+        
+        # Check if the branch flow is allowed
+        if check_flow "$source_branch" "$target_branch"; then
+          echo "✅ Branch flow is allowed: ${source_branch} → ${target_branch}"
+          exit 0
+        else
+          echo "❌ ERROR: Branch flow not allowed!"
+          echo ""
+          echo "The branch flow from '${source_branch}' to '${target_branch}' is not permitted."
+          echo ""
+          echo "Allowed flows:"
+          echo "  - feature/* → main"
+          echo "  - feature/* → feature/*-epic-* (epic branches)"
+          echo "  - feature/*-epic-* → main"
+          echo "  - hotfix/* → main or epic branches"
+          echo "  - bugfix/* → main"
+          echo "  - chore/* → main"
+          echo "  - docs/* → main"
+          echo ""
+          echo "Epic Branch Rules:"
+          echo "  - Feature branches can merge into epic branches"
+          echo "  - Epic branches can merge into main"
+          echo "  - Main branch cannot merge into epic branches"
+          echo ""
+          echo "Please ensure you're merging into the correct target branch."
+          exit 1
+        fi
