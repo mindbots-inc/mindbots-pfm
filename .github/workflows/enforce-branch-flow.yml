@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened]
     branches: 
       - main
-      - 'feature/[0-9]*-epic-*'
+      - 'feature/[0-9]+-epic-*'
 
 jobs:
   check-branch-flow:
