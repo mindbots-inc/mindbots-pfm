@@ -20,6 +20,35 @@ jobs:
         source_branch="${{ github.head_ref }}"
         target_branch="${{ github.base_ref }}"
         
+        # Early validation for epic branch patterns
+        validate_epic_branch() {
+          local branch=$1
+          if [[ "$branch" =~ -epic- ]] && ! [[ "$branch" =~ ^feature/[0-9]+-epic- ]]; then
+            echo "❌ ERROR: Invalid epic branch format!"
+            echo ""
+            echo "Branch '${branch}' contains '-epic-' but doesn't follow the required pattern."
+            echo ""
+            echo "Epic branches must follow the pattern: feature/[issue-number]-epic-[title]"
+            echo "Examples:"
+            echo "  ✅ feature/123-epic-authentication"
+            echo "  ✅ feature/45-epic-user-management"
+            echo "  ❌ feature/abc-epic-test (no issue number)"
+            echo "  ❌ feature/epic-test (missing issue number prefix)"
+            echo ""
+            echo "Please rename your branch to follow the correct pattern."
+            return 1
+          fi
+          return 0
+        }
+        
+        # Validate both source and target branches
+        if ! validate_epic_branch "$source_branch"; then
+          exit 1
+        fi
+        if ! validate_epic_branch "$target_branch"; then
+          exit 1
+        fi
+        
         # Define allowed branch flows
         check_flow() {
           local source=$1
