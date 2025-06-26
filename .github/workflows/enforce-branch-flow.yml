@@ -23,7 +23,8 @@ jobs:
         # Early validation for epic branch patterns
         validate_epic_branch() {
           local branch=$1
-          if [[ "$branch" =~ -epic- ]] && ! [[ "$branch" =~ ^feature/[0-9]+-epic- ]]; then
+          # Only validate branches that start with feature/ AND contain -epic-
+          if [[ "$branch" =~ ^feature/.*-epic- ]] && ! [[ "$branch" =~ ^feature/[0-9]+-epic- ]]; then
             echo "❌ ERROR: Invalid epic branch format!"
             echo ""
             echo "Branch '${branch}' contains '-epic-' but doesn't follow the required pattern."
